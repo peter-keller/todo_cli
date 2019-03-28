@@ -160,7 +160,8 @@ class CLI
 
   def parse_to_update(arg)
     new_task = @prompt.ask("Edit task: ")
-    task_id = @tasks.select { |task| task["task"] == arg.split(". ")[1].split(" - ")[0] }.first["id"]
+    task_id = @tasks.select { |task| task["task"] == arg.split(/(\d\.\s)/)[2].split(" - Priority:")[0] }.first["id"]
+    puts task_id
     res = RestClient.put("http://localhost:3000/api/v1/todo/#{task_id}", {data: {task: new_task, priority: prompt_priority()}})
     ask_choice()
   end
